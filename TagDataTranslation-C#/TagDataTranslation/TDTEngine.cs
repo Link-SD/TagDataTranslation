@@ -14,9 +14,9 @@ namespace TagDataTranslation
 {
     public class TDTEngine
     {
-        List<EpcTagDataTranslation> epcTagDataTranslations = new List<EpcTagDataTranslation>();
-        Dictionary<string, int> gcpPrefixLengths = new Dictionary<string, int>();
-        Dictionary<string, Dictionary<int, string>> filterValueTables = new Dictionary<string, Dictionary<int, string>>();
+        private List<EpcTagDataTranslation> epcTagDataTranslations = new List<EpcTagDataTranslation>();
+        private Dictionary<string, int> gcpPrefixLengths = new Dictionary<string, int>();
+        private Dictionary<string, Dictionary<int, string>> filterValueTables = new Dictionary<string, Dictionary<int, string>>();
 
         public TDTEngine()
         {
@@ -516,7 +516,7 @@ namespace TagDataTranslation
             return parameterDictionary;
         }
 
-        string ProcessOutput(Dictionary<string, string> parameterDictionary, string outputFormat)
+        private string ProcessOutput(Dictionary<string, string> parameterDictionary, string outputFormat)
         {
             // Note the desired outbound level.
             LevelTypeList outputFormatType;
@@ -864,7 +864,7 @@ namespace TagDataTranslation
         #region Escaping
 
         // According to the GS1 General Specifications [GS1GS14.0] for use in alphanumeric serial numbers.
-        string Escape(string input)
+        private string Escape(string input)
         {
             StringBuilder output = new StringBuilder(input);
             output.Replace("%", "%25");
@@ -878,7 +878,7 @@ namespace TagDataTranslation
             return output.ToString();
         }
 
-        string UnEscape(string input)
+        private string UnEscape(string input)
         {
             StringBuilder output = new StringBuilder(input);
             output.Replace("%22", "\"");
@@ -898,7 +898,7 @@ namespace TagDataTranslation
 
         #region Rules
 
-        void ExecuteRules(Rule[] rules, ModeList modeList, Dictionary<string, string> parameterDictionary)
+        private void ExecuteRules(Rule[] rules, ModeList modeList, Dictionary<string, string> parameterDictionary)
         {
             if (rules == null)
                 return;
@@ -995,7 +995,7 @@ namespace TagDataTranslation
             }
         }
 
-        string GetValue(string input, Dictionary<string, string> epcIdentifierDictionary)
+        private string GetValue(string input, Dictionary<string, string> epcIdentifierDictionary)
         {
             // Check if the field is an integer and if so, return it
             int result;
@@ -1011,28 +1011,28 @@ namespace TagDataTranslation
 
         // SUBSTR (string, offset)
         // the substring starting at <offset> (offset=0 is the first character of string)
-        string RuleSUBSTR(string input, int offset)
+        private string RuleSUBSTR(string input, int offset)
         {
             return input.Substring(offset);
         }
 
         // SUBSTR (string, offset, length)
         // the substring starting at <offset> (offset=0 is the first character of string) and of <length> characters
-        string RuleSUBSTR(string input, int offset, int length)
+        private string RuleSUBSTR(string input, int offset, int length)
         {
             return input.Substring(offset, length);
         }
 
         // CONCAT (string1, string2, string3,...)
         // concatenation of string parameters
-        string RuleCONCAT(List<string> input)
+        private string RuleCONCAT(List<string> input)
         {
             return string.Concat(input);
         }
 
         // GS1CHECKSUM (string)
         // Computes the GS1 checksum digit given a string containing all the preceding digits
-        string RuleGS1CHECKSUM(string input)
+        private string RuleGS1CHECKSUM(string input)
         {
             // courtesy of http://codereview.stackexchange.com/questions/126685/calculate-gs1-sscc-upc-check-digit
             int sum = 0;
@@ -1050,7 +1050,7 @@ namespace TagDataTranslation
 
         #region Validation
 
-        bool ValidateCharacterset(string input, string characterSet)
+        private bool ValidateCharacterset(string input, string characterSet)
         {
             if (input.Length == 0)
                 return true;
@@ -1059,14 +1059,14 @@ namespace TagDataTranslation
             return r.IsMatch(input);
         }
 
-        bool ValidateMinimum(BigInteger input, string minimum)
+        private bool ValidateMinimum(BigInteger input, string minimum)
         {
             BigInteger minimumInt;
             BigInteger.TryParse(minimum, out minimumInt);
             return input < minimumInt;
         }
 
-        bool ValidateMaximum(BigInteger input, string maximum)
+        private bool ValidateMaximum(BigInteger input, string maximum)
         {
             BigInteger maximumInt;
             BigInteger.TryParse(maximum, out maximumInt);
@@ -1077,7 +1077,7 @@ namespace TagDataTranslation
 
         #region Helper
 
-        void ParseInput(string input, Dictionary<string, string> parameterDictionary)
+        private void ParseInput(string input, Dictionary<string, string> parameterDictionary)
         {
             if (input.Length > 0)
             {
